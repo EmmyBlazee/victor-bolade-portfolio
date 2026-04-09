@@ -11,15 +11,17 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ title, category, image, index }: ProjectCardProps) {
+  const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
+
   return (
-    <motion.div 
-      className="project-card"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-      whileHover={{ y: -10 }}
-    >
+      <motion.div 
+        className="project-card"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: yOffset }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.1, duration: 0.8 }}
+        whileHover={{ y: yOffset - 15 }}
+      >
       <div className="image-container">
         <img src={image} alt={title} className="project-image" />
         <div className="overlay">
@@ -30,7 +32,7 @@ export default function ProjectCard({ title, category, image, index }: ProjectCa
             transition={{ duration: 0.3 }}
           >
             <span className="category">{category}</span>
-            <h3 className="project-title">{title}</h3>
+            <h3 className="project-title playfair">{title}</h3>
             <div className="view-project">
               View Project 
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -94,8 +96,11 @@ export default function ProjectCard({ title, category, image, index }: ProjectCa
         }
 
         .project-title {
-          font-size: 1.5rem;
+          font-size: 1.8rem;
           margin-bottom: 15px;
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 500;
         }
 
         .view-project {

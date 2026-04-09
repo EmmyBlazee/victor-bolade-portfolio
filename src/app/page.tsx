@@ -60,6 +60,27 @@ export default function Home() {
     transition: { duration: 0.8, ease: "easeOut" as any }
   };
 
+  const titleWords = "Victor Bolade".split(" ");
+  const taglineWords = "Crafting Visual Legacies.".split(" ");
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+    }
+  };
+
+  const wordVariants = {
+    hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: "blur(0px)",
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
   return (
     <div className="home-page">
       {/* Hero Section */}
@@ -67,35 +88,45 @@ export default function Home() {
         <div className="container">
           <motion.div 
             className="hero-content"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" as any }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
             <motion.span 
               className="hero-tag"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              variants={wordVariants}
             >
               Graphic Designer & Visionary
             </motion.span>
             <h1 className="hero-title">
-              Victor Bolade <br />
-              <span className="accent-text">Crafting Visual Legacies.</span>
+              <div className="title-row">
+                {titleWords.map((word, i) => (
+                  <motion.span key={i} variants={wordVariants} className="word">
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="tagline-row">
+                {taglineWords.map((word, i) => (
+                  <motion.span 
+                    key={i} 
+                    variants={wordVariants} 
+                    className={`word ${i >= 1 ? 'playfair accent-text' : ''}`}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
             </h1>
             <motion.p 
               className="hero-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              variants={wordVariants}
             >
               Specializing in premium branding, high-end digital design, and artistic visual storytelling for brands that dare to lead.
             </motion.p>
             <motion.div 
               className="hero-actions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
+              variants={wordVariants}
             >
               <a href="#portfolio" className="primary-btn glass">Explore Work</a>
               <a href="#contact" className="secondary-btn">Get In Touch</a>
@@ -258,14 +289,38 @@ export default function Home() {
         }
 
         .hero-title {
-          font-size: clamp(3rem, 8vw, 6rem);
-          line-height: 1.1;
+          font-size: clamp(3.5rem, 10vw, 7.5rem);
+          line-height: 1;
           margin-bottom: 2rem;
         }
 
+        .title-row {
+          display: flex;
+          gap: 0.2em;
+          flex-wrap: wrap;
+        }
+
+        .tagline-row {
+          display: flex;
+          gap: 0.2em;
+          flex-wrap: wrap;
+          margin-top: 0.5rem;
+        }
+
+        .word {
+          display: inline-block;
+        }
+
+        .playfair {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 400;
+        }
+
         .accent-text {
-          color: transparent;
-          -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+          color: var(--accent);
+          text-shadow: var(--accent-glow);
+          -webkit-text-stroke: 0;
         }
 
         .hero-content {
