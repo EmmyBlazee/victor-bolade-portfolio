@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
 import Magnetic from '@/components/Magnetic';
 
@@ -41,6 +41,17 @@ const projects = [
 export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,15 +94,36 @@ export default function Home() {
   };
 
   return (
-    <div className="home-page">
+    <div className="home-page" ref={containerRef}>
       {/* Hero Section */}
       <section className="hero">
+        {/* Animated Background Orbs */}
+        <motion.div 
+          className="bg-glow" 
+          style={{ top: '10%', right: '10%', y: y1 }}
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.15, 0.1]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="bg-glow" 
+          style={{ bottom: '20%', left: '5%', y: y2, background: 'radial-gradient(circle, #5ce1ff 0%, rgba(0,0,0,0) 70%)' }}
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.05, 0.1, 0.05]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+
         <div className="container">
           <motion.div 
             className="hero-content"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
+            style={{ opacity, scale }}
           >
             <motion.span 
               className="hero-tag"
@@ -283,10 +315,11 @@ export default function Home() {
         }
 
         .hero-title {
-          font-size: clamp(2.5rem, 7vw, 5rem);
-          line-height: 1.1;
+          font-size: clamp(1.8rem, 8vw, 6rem);
+          line-height: 1;
           margin-bottom: 2rem;
           font-weight: 800;
+          word-wrap: break-word;
         }
 
         .title-row {

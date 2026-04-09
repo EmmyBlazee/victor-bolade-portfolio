@@ -26,6 +26,7 @@ html, body {
   color: var(--text-primary);
   font-family: 'Outfit', sans-serif;
   overflow-x: hidden;
+  width: 100%;
   scroll-behavior: smooth;
   position: relative;
 }
@@ -116,11 +117,17 @@ body {
 
 /* Sections */
 section {
-  padding: 100px 5vw;
+  padding: 140px 5vw 100px;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 100px 5vw 60px;
+  }
 }
 
 h1, h2, h3 {
@@ -137,5 +144,17 @@ p {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--accent) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(80px);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
 }
 

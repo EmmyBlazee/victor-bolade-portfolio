@@ -42,15 +42,28 @@ export default function Navbar() {
         {menuOpen && (
           <motion.div 
             className="mobile-menu glass"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial={{ clipPath: 'circle(0% at 90% 5%)' }}
+            animate={{ clipPath: 'circle(150% at 90% 5%)' }}
+            exit={{ clipPath: 'circle(0% at 90% 5%)' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mobile-links">
-              <Link href="#portfolio" className="mobile-link" onClick={toggleMenu}>Explore Work</Link>
-              <Link href="#about" className="mobile-link" onClick={toggleMenu}>Philosophy</Link>
-              <Link href="#contact" className="mobile-link contact-accent" onClick={toggleMenu}>Get In Touch</Link>
+              {['Explore Work', 'Philosophy', 'Get In Touch'].map((text, i) => (
+                <motion.div
+                  key={text}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                >
+                  <Link 
+                    href={text === 'Get In Touch' ? '#contact' : text === 'Philosophy' ? '#about' : '#portfolio'} 
+                    className={`mobile-link ${text === 'Get In Touch' ? 'contact-accent' : ''}`}
+                    onClick={toggleMenu}
+                  >
+                    {text}
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         )}
@@ -139,7 +152,8 @@ export default function Navbar() {
           left: 0;
           width: 100%;
           height: 100vh;
-          background: rgba(10, 10, 12, 0.98);
+          background: rgba(10, 10, 12, 0.95);
+          backdrop-filter: blur(20px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -154,11 +168,12 @@ export default function Navbar() {
         }
 
         .mobile-link {
-          font-size: 2rem;
-          font-weight: 700;
+          font-size: 2.5rem;
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 500;
           color: var(--text-primary);
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
+          letter-spacing: -0.02em;
         }
 
         .contact-accent {
@@ -174,6 +189,12 @@ export default function Navbar() {
           }
           .navbar {
             padding: 20px 5vw;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .mobile-menu {
+            display: none !important;
           }
         }
       `}</style>
