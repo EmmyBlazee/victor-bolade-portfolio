@@ -14,14 +14,14 @@ export default function ProjectCard({ title, category, image, index }: ProjectCa
   const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
 
   return (
-      <motion.div 
-        className="project-card"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: yOffset }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.1, duration: 0.8 }}
-        whileHover={{ y: yOffset - 15 }}
-      >
+    <motion.div 
+      className="project-card"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: yOffset }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.8 }}
+      whileHover={{ y: yOffset - 15 }}
+    >
       <div className="image-container">
         <img src={image} alt={title} className="project-image" />
         <div className="overlay">

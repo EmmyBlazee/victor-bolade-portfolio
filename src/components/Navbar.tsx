@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Magnetic from './Magnetic';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,9 +28,9 @@ export default function Navbar() {
         </Link>
         
         <div className="nav-links desktop-only">
-          <Link href="#portfolio" className="nav-link">Work</Link>
-          <Link href="#about" className="nav-link">About</Link>
-          <Link href="#contact" className="contact-btn glass">Let's Talk</Link>
+          <Magnetic><Link href="#portfolio" className="nav-link">Explore Work</Link></Magnetic>
+          <Magnetic><Link href="#about" className="nav-link">Philosophy</Link></Magnetic>
+          <Magnetic><Link href="#contact" className="contact-btn glass">Get In Touch</Link></Magnetic>
         </div>
 
         <button className="mobile-toggle" onClick={toggleMenu} aria-label="Toggle Menu">
@@ -47,9 +48,9 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
           >
             <div className="mobile-links">
-              <Link href="#portfolio" className="mobile-link" onClick={toggleMenu}>Work</Link>
-              <Link href="#about" className="mobile-link" onClick={toggleMenu}>About</Link>
-              <Link href="#contact" className="mobile-link contact-accent" onClick={toggleMenu}>Let's Talk</Link>
+              <Link href="#portfolio" className="mobile-link" onClick={toggleMenu}>Explore Work</Link>
+              <Link href="#about" className="mobile-link" onClick={toggleMenu}>Philosophy</Link>
+              <Link href="#contact" className="mobile-link contact-accent" onClick={toggleMenu}>Get In Touch</Link>
             </div>
           </motion.div>
         )}

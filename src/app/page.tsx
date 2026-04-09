@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
+import Magnetic from '@/components/Magnetic';
 
 const projects = [
   {
@@ -77,7 +78,7 @@ export default function Home() {
       opacity: 1, 
       y: 0, 
       filter: "blur(0px)",
-      transition: { duration: 0.8, ease: "easeOut" }
+      transition: { duration: 0.8, ease: "easeOut" as any }
     }
   };
 
@@ -96,7 +97,7 @@ export default function Home() {
               className="hero-tag"
               variants={wordVariants}
             >
-              Graphic Designer & Visionary
+              Multidisciplinary Designer & Visual Strategist
             </motion.span>
             <h1 className="hero-title">
               <div className="title-row">
@@ -122,15 +123,8 @@ export default function Home() {
               className="hero-description"
               variants={wordVariants}
             >
-              Specializing in premium branding, high-end digital design, and artistic visual storytelling for brands that dare to lead.
+              Synthesizing high-concept visual identities with architectural precision. Operating at the intersection of branding, digital experiences, and artistic storytelling for global industry leaders.
             </motion.p>
-            <motion.div 
-              className="hero-actions"
-              variants={wordVariants}
-            >
-              <a href="#portfolio" className="primary-btn glass">Explore Work</a>
-              <a href="#contact" className="secondary-btn">Get In Touch</a>
-            </motion.div>
           </motion.div>
         </div>
         <div className="hero-bg-accent"></div>
@@ -289,22 +283,19 @@ export default function Home() {
         }
 
         .hero-title {
-          font-size: clamp(3.5rem, 10vw, 7.5rem);
-          line-height: 1;
+          font-size: clamp(2.5rem, 7vw, 5rem);
+          line-height: 1.1;
           margin-bottom: 2rem;
+          font-weight: 800;
         }
 
         .title-row {
-          display: flex;
-          gap: 0.2em;
-          flex-wrap: wrap;
+          display: block;
         }
 
         .tagline-row {
-          display: flex;
-          gap: 0.2em;
-          flex-wrap: wrap;
-          margin-top: 0.5rem;
+          display: block;
+          margin-top: 1rem;
         }
 
         .word {
@@ -339,8 +330,10 @@ export default function Home() {
 
         .hero-actions {
           display: flex;
-          gap: 20px;
-          margin-top: 4rem;
+          gap: 1.5rem;
+          margin-top: 3rem;
+          flex-wrap: wrap;
+          align-items: center;
         }
 
         .primary-btn {
@@ -395,7 +388,8 @@ export default function Home() {
         .projects-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-          gap: 30px;
+          gap: 80px 40px; /* Larger row gap for asymmetry */
+          padding-bottom: 60px;
         }
 
         /* About Grid */
