@@ -21,14 +21,14 @@ export default function Footer() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem('portfolio_footer');
-    if (stored) {
-      try {
-        setFooterData(JSON.parse(stored));
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    fetch('/api/settings?key=footer')
+      .then(res => res.json())
+      .then(data => {
+        if (data && !data.error) {
+          setFooterData({ ...defaultFooter, ...data });
+        }
+      })
+      .catch(console.error);
   }, []);
   return (
     <footer className="footer section">

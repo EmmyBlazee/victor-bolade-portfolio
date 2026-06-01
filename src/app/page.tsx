@@ -59,32 +59,36 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end end"]
   });
 
-  const [activeProjects, setActiveProjects] = useState(projects);
-  const [pageContent, setPageContent] = useState(defaultPageContent);
   const [mounted, setMounted] = useState(false);
+  const [activeProjects, setActiveProjects] = useState<any[]>(projects);
+  const [pageContent, setPageContent] = useState(defaultPageContent);
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem('portfolio_projects');
-    if (stored) {
-      try {
-        setActiveProjects(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse stored projects', e);
+    
+    // Fetch live content from Supabase API routes
+    Promise.all([
+      fetch('/api/projects').then(r => r.json()),
+      fetch('/api/settings?key=page_content').then(r => r.json())
+    ]).then(([projData, pageData]) => {
+      // If we got valid projects back, use them!
+      if (Array.isArray(projData) && projData.length > 0) {
+        setActiveProjects(projData);
       }
-    }
-    const storedPage = localStorage.getItem('portfolio_page_content');
-    if (storedPage) {
-      try {
-        setPageContent({ ...defaultPageContent, ...JSON.parse(storedPage) });
-      } catch (e) {}
-    }
+      
+      // If we got valid page content, merge it!
+      if (pageData && !pageData.error) {
+        setPageContent({ ...defaultPageContent, ...pageData });
+      }
+    }).catch(error => {
+      console.error("Error fetching live data:", error);
+    });
   }, []);
 
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);

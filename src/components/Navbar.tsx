@@ -9,12 +9,24 @@ import Magnetic from './Magnetic';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
+    
+    // Fetch settings to check for profile/logo picture
+    fetch('/api/settings?key=page_content')
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.logoUrl) {
+          setLogoUrl(data.logoUrl);
+        }
+      })
+      .catch(console.error);
+      
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -24,7 +36,11 @@ export default function Navbar() {
     <nav className={`navbar ${scrolled || menuOpen ? 'scrolled glass' : ''}`}>
       <div className="navbar-container">
         <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
-          VB<span className="dot">.</span>
+          {logoUrl ? (
+            <img src={logoUrl} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+          ) : (
+            <>VB<span className="dot">.</span></>
+          )}
         </Link>
         
         <div className="nav-links desktop-only">

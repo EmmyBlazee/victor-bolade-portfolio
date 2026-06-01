@@ -51,28 +51,24 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let allProjects = defaultProjects;
-    const stored = localStorage.getItem('portfolio_projects');
-    if (stored) {
-      try {
-        allProjects = JSON.parse(stored);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        let allProjects = Array.isArray(data) && data.length > 0 ? data : defaultProjects;
 
-    if (params && params.slug) {
-      // Find the project matching this slug
-      const foundProject = allProjects.find((p: any) => {
-        const slug = encodeURIComponent(p.title.toLowerCase().replace(/\s+/g, '-'));
-        return slug === params.slug;
-      });
+        if (params && params.slug) {
+          const foundProject = allProjects.find((p: any) => {
+            const slug = encodeURIComponent(p.title.toLowerCase().replace(/\s+/g, '-'));
+            return slug === params.slug;
+          });
 
-      if (foundProject) {
-        setProject(foundProject);
-      }
-    }
-    setLoading(false);
+          if (foundProject) {
+            setProject(foundProject);
+          }
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [params]);
 
   if (loading) {
