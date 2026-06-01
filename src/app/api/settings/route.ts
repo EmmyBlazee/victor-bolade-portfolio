@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // GET a setting by key (e.g. ?key=footer or ?key=page_content)
 export async function GET(req: NextRequest) {
   const key = req.nextUrl.searchParams.get('key');
