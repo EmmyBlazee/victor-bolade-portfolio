@@ -123,7 +123,7 @@ export default function ProjectDetail() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <img src={project.image} alt={project.title} className="hero-img"/>
+          <img src={project.image || project.image_url} alt={project.title} className="hero-img"/>
         </motion.div>
 
         <div className="content-grid">

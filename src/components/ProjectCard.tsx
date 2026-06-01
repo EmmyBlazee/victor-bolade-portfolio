@@ -7,12 +7,14 @@ import Link from 'next/link';
 interface ProjectCardProps {
   title: string;
   category: string;
-  image: string;
+  image?: string;
+  image_url?: string;
   description?: string;
   index: number;
 }
 
-export default function ProjectCard({ title, category, image, description, index }: ProjectCardProps) {
+export default function ProjectCard({ title, category, image, image_url, description, index }: ProjectCardProps) {
+  const imgSrc = image || image_url;
   const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
   const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
 
@@ -27,7 +29,7 @@ export default function ProjectCard({ title, category, image, description, index
         whileHover={{ y: yOffset - 15 }}
       >
         <div className="image-container">
-          <img src={image} alt={title} className="project-image" />
+          <img src={imgSrc} alt={title} className="project-image" />
           <div className="overlay">
             <motion.div 
               className="overlay-content"
