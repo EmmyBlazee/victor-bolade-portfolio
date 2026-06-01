@@ -11,7 +11,7 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (credentials.email === 'mdacreatives01' && credentials.password === '07030796210') {
+    if (credentials.email === 'mdacreatives01' && credentials.password === '7030796210') {
       localStorage.setItem('admin_auth', 'true');
       router.push('/admin');
     } else {
@@ -22,7 +22,7 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="container">
-        <motion.div 
+        <motion.div
           className="login-box glass"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -30,24 +30,24 @@ export default function Login() {
         >
           <h2 className="section-title">Admin Access</h2>
           <p>Please log in to manage your portfolio.</p>
-          
+
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
-              <input 
-                type="text" 
-                placeholder="Email Address" 
-                className="glass-input" 
-                required 
+              <input
+                type="text"
+                placeholder="Email Address"
+                className="glass-input"
+                required
                 value={credentials.email}
                 onChange={(e: any) => setCredentials({ ...credentials, email: e.target.value })}
               />
             </div>
             <div className="form-group">
-              <input 
-                type="password" 
-                placeholder="Password" 
-                className="glass-input" 
-                required 
+              <input
+                type="password"
+                placeholder="Password"
+                className="glass-input"
+                required
                 value={credentials.password}
                 onChange={(e: any) => setCredentials({ ...credentials, password: e.target.value })}
               />
