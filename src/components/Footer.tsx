@@ -21,7 +21,7 @@ export default function Footer() {
 
   useEffect(() => {
     setMounted(true);
-    fetch('/api/settings?key=footer')
+    fetch('/api/settings?key=footer', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (data && !data.error) {

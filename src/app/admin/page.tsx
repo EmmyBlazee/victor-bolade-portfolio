@@ -57,9 +57,9 @@ export default function AdminDashboard() {
     if (!auth) { router.push('/login'); return; }
 
     Promise.all([
-      fetch('/api/projects').then(r => r.json()),
-      fetch('/api/settings?key=footer').then(r => r.json()),
-      fetch('/api/settings?key=page_content').then(r => r.json()),
+      fetch('/api/projects', { cache: 'no-store' }).then(r => r.json()),
+      fetch('/api/settings?key=footer', { cache: 'no-store' }).then(r => r.json()),
+      fetch('/api/settings?key=page_content', { cache: 'no-store' }).then(r => r.json()),
     ]).then(([proj, footer, page]) => {
       if (Array.isArray(proj)) setProjects(proj);
       if (footer) setFooterData({ ...defaultFooter, ...footer });

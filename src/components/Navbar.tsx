@@ -18,7 +18,7 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     
     // Fetch settings to check for profile/logo picture
-    fetch('/api/settings?key=page_content')
+    fetch('/api/settings?key=page_content', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         if (data && data.logoUrl) {

@@ -51,7 +51,7 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/projects')
+    fetch('/api/projects', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         let allProjects = Array.isArray(data) && data.length > 0 ? data : defaultProjects;

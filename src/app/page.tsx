@@ -23,36 +23,7 @@ const defaultPageContent = {
 };
 
 const projects = [
-  {
-    title: "EcoBrand Identity",
-    category: "Branding",
-    image: "https://images.unsplash.com/photo-1634942537034-2530b667362c?q=80&w=1974&auto=format&fit=crop"
-  },
-  {
-    title: "Architectural Type",
-    category: "Typography",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop"
-  },
-  {
-    title: "Nexus UX/UI",
-    category: "Digital Design",
-    image: "https://images.unsplash.com/photo-1541462608141-ad603a1ee596?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "Vivid Motion Caps",
-    category: "Motion Graphics",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "Urban Flux Posters",
-    category: "Print Media",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop"
-  },
-  {
-    title: "Serenity Branding",
-    category: "Minimalism",
-    image: "https://images.unsplash.com/photo-1586717791821-3f44a563cc4c?q=80&w=2070&auto=format&fit=crop"
-  }
+  {}
 ];
 
 export default function Home() {
@@ -71,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Fetch live content from Supabase API routes
     Promise.all([
       fetch('/api/projects', { cache: 'no-store' }).then(r => r.json()),
@@ -81,7 +52,7 @@ export default function Home() {
       if (Array.isArray(projData) && projData.length > 0) {
         setActiveProjects(projData);
       }
-      
+
       // If we got valid page content, merge it!
       if (pageData && !pageData.error) {
         setPageContent({ ...defaultPageContent, ...pageData });
