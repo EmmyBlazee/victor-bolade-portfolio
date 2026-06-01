@@ -1,30 +1,57 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+const defaultFooter = {
+  bio: "Designing digital experiences that leave a lasting impression. Let's build something exceptional together.",
+  socials: [
+    { label: 'Behance', url: '#' },
+    { label: 'Dribbble', url: '#' },
+    { label: 'LinkedIn', url: '#' },
+    { label: 'Instagram', url: '#' }
+  ],
+  email: 'victor@bolade.design',
+  phone: '+234 800 123 4567'
+};
+
 export default function Footer() {
+  const [footerData, setFooterData] = useState(defaultFooter);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const stored = localStorage.getItem('portfolio_footer');
+    if (stored) {
+      try {
+        setFooterData(JSON.parse(stored));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
   return (
     <footer className="footer section">
       <div className="container">
         <div className="footer-grid">
           <div className="footer-info">
             <h2 className="footer-logo">VB<Link href="/login" className="dot-link"><span className="dot">.</span></Link></h2>
-            <p>Designing digital experiences that leave a lasting impression. Let's build something exceptional together.</p>
+            <p>{footerData.bio}</p>
           </div>
           
           <div className="footer-links">
             <h3>Social</h3>
-            <a href="#" className="footer-link">Behance</a>
-            <a href="#" className="footer-link">Dribbble</a>
-            <a href="#" className="footer-link">LinkedIn</a>
-            <a href="#" className="footer-link">Instagram</a>
+            {footerData.socials.map((link, index) => (
+              <a key={index} href={link.url} className="footer-link" target="_blank" rel="noopener noreferrer">
+                {link.label}
+              </a>
+            ))}
           </div>
 
           <div className="footer-contact">
             <h3>Get in Touch</h3>
-            <p>victor@bolade.design</p>
-            <p>+234 800 123 4567</p>
+            <p>{footerData.email}</p>
+            <p>{footerData.phone}</p>
           </div>
         </div>
 

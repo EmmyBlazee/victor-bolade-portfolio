@@ -11,7 +11,7 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (credentials.email === 'jordan' && credentials.password === '07030796210') {
+    if (credentials.email === 'mdacreatives01' && credentials.password === '07030796210') {
       localStorage.setItem('admin_auth', 'true');
       router.push('/admin');
     } else {

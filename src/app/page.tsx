@@ -5,6 +5,23 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
 import Magnetic from '@/components/Magnetic';
 
+const defaultPageContent = {
+  heroTag: "Graphic Designer",
+  heroTitle: "Victor Bolade",
+  heroTagline: "Crafting Visual Legacies.",
+  heroDescription: "Synthesizing high-concept visual identities with architectural precision. Operating at the intersection of branding, digital experiences, and artistic storytelling for global industry leaders.",
+  aboutPhilosophy: "My approach to design is rooted in the belief that every brand has a soul waiting to be visualized. With over a decade of experience, I blend artistic intuition with strategic precision to create identities that aren't just seen—they're felt.",
+  stats: [
+    { number: "4+", label: "Years Experience" },
+    { number: "10+", label: "Projects Completed" }
+  ],
+  services: [
+    { title: "Branding", desc: "Strategic identity systems, logo design, and brand guidelines." },
+    { title: "Digital Design", desc: "Bespoke web experiences, mobile interfaces, and digital assets." },
+    { title: "Visual Art", desc: "Custom illustrations, typography, and motion graphics." }
+  ]
+};
+
 const projects = [
   {
     title: "EcoBrand Identity",
@@ -49,6 +66,7 @@ export default function Home() {
   });
 
   const [activeProjects, setActiveProjects] = useState(projects);
+  const [pageContent, setPageContent] = useState(defaultPageContent);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -60,6 +78,12 @@ export default function Home() {
       } catch (e) {
         console.error('Failed to parse stored projects', e);
       }
+    }
+    const storedPage = localStorage.getItem('portfolio_page_content');
+    if (storedPage) {
+      try {
+        setPageContent({ ...defaultPageContent, ...JSON.parse(storedPage) });
+      } catch (e) {}
     }
   }, []);
 
@@ -87,8 +111,8 @@ export default function Home() {
     transition: { duration: 0.8, ease: "easeOut" as any }
   };
 
-  const titleWords = "Victor Bolade".split(" ");
-  const taglineWords = "Crafting Visual Legacies.".split(" ");
+  const titleWords = pageContent.heroTitle.split(" ");
+  const taglineWords = pageContent.heroTagline.split(" ");
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -144,7 +168,7 @@ export default function Home() {
               className="hero-tag"
               variants={wordVariants}
             >
-              Graphic Designer
+              {pageContent.heroTag}
             </motion.span>
             <h1 className="hero-title">
               <div className="title-row">
@@ -170,7 +194,7 @@ export default function Home() {
               className="hero-description"
               variants={wordVariants}
             >
-              Synthesizing high-concept visual identities with architectural precision. Operating at the intersection of branding, digital experiences, and artistic storytelling for global industry leaders.
+              {pageContent.heroDescription}
             </motion.p>
           </motion.div>
         </div>
@@ -209,28 +233,20 @@ export default function Home() {
             <div className="about-content">
               <h2 className="section-title">The Philosophy</h2>
               <p>
-                My approach to design is rooted in the belief that every brand has a soul waiting to be visualized.
-                With over a decade of experience, I blend artistic intuition with strategic precision to create
-                identities that aren't just seen—they're felt.
+                {pageContent.aboutPhilosophy}
               </p>
               <div className="stats-grid">
-                <div className="stat-item">
-                  <span className="stat-number">4+</span>
-                  <span className="stat-label">Years Experience</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-number">10+</span>
-                  <span className="stat-label">Projects Completed</span>
-                </div>
+                {pageContent.stats.map((stat, i) => (
+                  <div key={i} className="stat-item">
+                    <span className="stat-number">{stat.number}</span>
+                    <span className="stat-label">{stat.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="services-list">
-              {[
-                { title: "Branding", desc: "Strategic identity systems, logo design, and brand guidelines." },
-                { title: "Digital Design", desc: "Bespoke web experiences, mobile interfaces, and digital assets." },
-                { title: "Visual Art", desc: "Custom illustrations, typography, and motion graphics." }
-              ].map((service, i) => (
+              {pageContent.services.map((service, i) => (
                 <motion.div
                   key={i}
                   className="service-item glass"

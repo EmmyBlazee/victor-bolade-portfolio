@@ -47,6 +47,38 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [newProject, setNewProject] = useState({ title: '', category: '', image: '', description: '' });
+  
+  const defaultFooter = {
+    bio: "Designing digital experiences that leave a lasting impression. Let's build something exceptional together.",
+    socials: [
+      { label: 'Behance', url: '#' },
+      { label: 'Dribbble', url: '#' },
+      { label: 'LinkedIn', url: '#' },
+      { label: 'Instagram', url: '#' }
+    ],
+    email: 'victor@bolade.design',
+    phone: '+234 800 123 4567'
+  };
+  const [footerData, setFooterData] = useState(defaultFooter);
+
+  const defaultPageContent = {
+    heroTag: "Graphic Designer",
+    heroTitle: "Victor Bolade",
+    heroTagline: "Crafting Visual Legacies.",
+    heroDescription: "Synthesizing high-concept visual identities with architectural precision. Operating at the intersection of branding, digital experiences, and artistic storytelling for global industry leaders.",
+    aboutPhilosophy: "My approach to design is rooted in the belief that every brand has a soul waiting to be visualized. With over a decade of experience, I blend artistic intuition with strategic precision to create identities that aren't just seen—they're felt.",
+    stats: [
+      { number: "4+", label: "Years Experience" },
+      { number: "10+", label: "Projects Completed" }
+    ],
+    services: [
+      { title: "Branding", desc: "Strategic identity systems, logo design, and brand guidelines." },
+      { title: "Digital Design", desc: "Bespoke web experiences, mobile interfaces, and digital assets." },
+      { title: "Visual Art", desc: "Custom illustrations, typography, and motion graphics." }
+    ]
+  };
+  const [pageContent, setPageContent] = useState(defaultPageContent);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -66,6 +98,23 @@ export default function AdminDashboard() {
     } else {
       setProjects(defaultProjects);
     }
+
+    const storedFooter = localStorage.getItem('portfolio_footer');
+    if (storedFooter) {
+      try {
+        setFooterData(JSON.parse(storedFooter));
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    const storedPage = localStorage.getItem('portfolio_page_content');
+    if (storedPage) {
+      try {
+        setPageContent({ ...defaultPageContent, ...JSON.parse(storedPage) });
+      } catch (e) {}
+    }
+
     setLoading(false);
   }, [router]);
 
@@ -97,6 +146,24 @@ export default function AdminDashboard() {
   const handleRemoveProject = (index: number) => {
     const updated = projects.filter((_: any, i: number) => i !== index);
     saveProjects(updated);
+  };
+
+  const handleSaveFooter = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('portfolio_footer', JSON.stringify(footerData));
+    alert('Footer configuration saved successfully!');
+  };
+
+  const handleSocialChange = (index: number, field: 'label' | 'url', value: string) => {
+    const newSocials = [...footerData.socials];
+    newSocials[index] = { ...newSocials[index], [field]: value };
+    setFooterData({ ...footerData, socials: newSocials });
+  };
+
+  const handleSavePageContent = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('portfolio_page_content', JSON.stringify(pageContent));
+    alert('Homepage content saved successfully!');
   };
 
   const handleLogout = () => {
@@ -192,6 +259,132 @@ export default function AdminDashboard() {
             </div>
           </motion.div>
         </div>
+
+        {/* Edit Homepage Form */}
+        <motion.div 
+          className="admin-panel glass"
+          style={{ marginTop: '40px' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h3>Edit Homepage Content</h3>
+          <form className="add-form" onSubmit={handleSavePageContent}>
+            <div className="admin-grid" style={{ gap: '20px' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Hero Tagline</label>
+                <input 
+                  type="text" 
+                  className="glass-input" 
+                  value={pageContent.heroTag}
+                  onChange={(e) => setPageContent({ ...pageContent, heroTag: e.target.value })}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Hero Title</label>
+                <input 
+                  type="text" 
+                  className="glass-input" 
+                  value={pageContent.heroTitle}
+                  onChange={(e) => setPageContent({ ...pageContent, heroTitle: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Hero Sub-tagline</label>
+              <input 
+                type="text" 
+                className="glass-input" 
+                value={pageContent.heroTagline}
+                onChange={(e) => setPageContent({ ...pageContent, heroTagline: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Hero Description</label>
+              <textarea 
+                className="glass-input" 
+                rows={3}
+                value={pageContent.heroDescription}
+                onChange={(e) => setPageContent({ ...pageContent, heroDescription: e.target.value })}
+              ></textarea>
+            </div>
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>About / Philosophy text</label>
+              <textarea 
+                className="glass-input" 
+                rows={3}
+                value={pageContent.aboutPhilosophy}
+                onChange={(e) => setPageContent({ ...pageContent, aboutPhilosophy: e.target.value })}
+              ></textarea>
+            </div>
+            <button type="submit" className="submit-btn glass">Save Homepage Content</button>
+          </form>
+        </motion.div>
+
+        {/* Edit Footer Form */}
+        <motion.div 
+          className="admin-panel glass"
+          style={{ marginTop: '40px' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h3>Edit Footer & Contact</h3>
+          <form className="add-form" onSubmit={handleSaveFooter}>
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Bio Description</label>
+              <textarea 
+                className="glass-input" 
+                rows={3}
+                value={footerData.bio}
+                onChange={(e) => setFooterData({ ...footerData, bio: e.target.value })}
+              ></textarea>
+            </div>
+            <div className="admin-grid" style={{ gap: '20px' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Email</label>
+                <input 
+                  type="text" 
+                  className="glass-input" 
+                  value={footerData.email}
+                  onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', color: 'var(--accent)' }}>Phone</label>
+                <input 
+                  type="text" 
+                  className="glass-input" 
+                  value={footerData.phone}
+                  onChange={(e) => setFooterData({ ...footerData, phone: e.target.value })}
+                />
+              </div>
+            </div>
+            
+            <div className="form-group" style={{ marginTop: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '15px', color: 'var(--accent)' }}>Social Links</label>
+              {footerData.socials.map((link, i) => (
+                <div key={i} style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Platform Label"
+                    className="glass-input" 
+                    style={{ flex: 1 }}
+                    value={link.label}
+                    onChange={(e) => handleSocialChange(i, 'label', e.target.value)}
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="URL"
+                    className="glass-input" 
+                    style={{ flex: 2 }}
+                    value={link.url}
+                    onChange={(e) => handleSocialChange(i, 'url', e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
+            <button type="submit" className="submit-btn glass">Save Footer Configuration</button>
+          </form>
+        </motion.div>
       </div>
 
       <style jsx>{`
