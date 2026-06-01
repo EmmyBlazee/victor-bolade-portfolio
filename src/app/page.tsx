@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ProjectCard from '@/components/ProjectCard';
 import Magnetic from '@/components/Magnetic';
@@ -41,12 +41,27 @@ const projects = [
 export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  
+
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
+
+  const [activeProjects, setActiveProjects] = useState(projects);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const stored = localStorage.getItem('portfolio_projects');
+    if (stored) {
+      try {
+        setActiveProjects(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to parse stored projects', e);
+      }
+    }
+  }, []);
 
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
@@ -56,7 +71,7 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus('sending');
-    
+
     // Simulate API call
     setTimeout(() => {
       setFormStatus('success');
@@ -85,9 +100,9 @@ export default function Home() {
 
   const wordVariants = {
     hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       filter: "blur(0px)",
       transition: { duration: 0.8, ease: "easeOut" as any }
     }
@@ -98,19 +113,19 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero">
         {/* Animated Background Orbs */}
-        <motion.div 
-          className="bg-glow" 
+        <motion.div
+          className="bg-glow"
           style={{ top: '10%', right: '10%', y: y1 }}
-          animate={{ 
+          animate={{
             scale: [1, 1.2, 1],
             opacity: [0.1, 0.15, 0.1]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div 
-          className="bg-glow" 
+        <motion.div
+          className="bg-glow"
           style={{ bottom: '20%', left: '5%', y: y2, background: 'radial-gradient(circle, #5ce1ff 0%, rgba(0,0,0,0) 70%)' }}
-          animate={{ 
+          animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.05, 0.1, 0.05]
           }}
@@ -118,18 +133,18 @@ export default function Home() {
         />
 
         <div className="container">
-          <motion.div 
+          <motion.div
             className="hero-content"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             style={{ opacity, scale }}
           >
-            <motion.span 
+            <motion.span
               className="hero-tag"
               variants={wordVariants}
             >
-              Multidisciplinary Designer & Visual Strategist
+              Graphic Designer
             </motion.span>
             <h1 className="hero-title">
               <div className="title-row">
@@ -141,9 +156,9 @@ export default function Home() {
               </div>
               <div className="tagline-row">
                 {taglineWords.map((word, i) => (
-                  <motion.span 
-                    key={i} 
-                    variants={wordVariants} 
+                  <motion.span
+                    key={i}
+                    variants={wordVariants}
                     className={`word ${i >= 1 ? 'playfair accent-text' : ''}`}
                   >
                     {word}
@@ -151,7 +166,7 @@ export default function Home() {
                 ))}
               </div>
             </h1>
-            <motion.p 
+            <motion.p
               className="hero-description"
               variants={wordVariants}
             >
@@ -163,8 +178,8 @@ export default function Home() {
       </section>
 
       {/* Portfolio Grid */}
-      <motion.section 
-        id="portfolio" 
+      <motion.section
+        id="portfolio"
         className="portfolio"
         {...fadeIn}
       >
@@ -174,7 +189,9 @@ export default function Home() {
             <div className="filter-hint">2022 — 2026</div>
           </div>
           <div className="projects-grid">
-            {projects.map((project, index) => (
+            {mounted ? activeProjects.map((project: any, index: number) => (
+              <ProjectCard key={index} {...project} index={index} />
+            )) : projects.map((project: any, index: number) => (
               <ProjectCard key={index} {...project} index={index} />
             ))}
           </div>
@@ -182,8 +199,8 @@ export default function Home() {
       </motion.section>
 
       {/* About/Services Section */}
-      <motion.section 
-        id="about" 
+      <motion.section
+        id="about"
         className="about-services"
         {...fadeIn}
       >
@@ -192,29 +209,29 @@ export default function Home() {
             <div className="about-content">
               <h2 className="section-title">The Philosophy</h2>
               <p>
-                My approach to design is rooted in the belief that every brand has a soul waiting to be visualized. 
-                With over a decade of experience, I blend artistic intuition with strategic precision to create 
+                My approach to design is rooted in the belief that every brand has a soul waiting to be visualized.
+                With over a decade of experience, I blend artistic intuition with strategic precision to create
                 identities that aren't just seen—they're felt.
               </p>
               <div className="stats-grid">
                 <div className="stat-item">
-                  <span className="stat-number">10+</span>
+                  <span className="stat-number">4+</span>
                   <span className="stat-label">Years Experience</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">150+</span>
+                  <span className="stat-number">10+</span>
                   <span className="stat-label">Projects Completed</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="services-list">
               {[
                 { title: "Branding", desc: "Strategic identity systems, logo design, and brand guidelines." },
                 { title: "Digital Design", desc: "Bespoke web experiences, mobile interfaces, and digital assets." },
                 { title: "Visual Art", desc: "Custom illustrations, typography, and motion graphics." }
               ].map((service, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   className="service-item glass"
                   whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.08)" }}
@@ -229,8 +246,8 @@ export default function Home() {
       </motion.section>
 
       {/* Contact Section */}
-      <motion.section 
-        id="contact" 
+      <motion.section
+        id="contact"
         className="contact"
         {...fadeIn}
       >
@@ -238,9 +255,9 @@ export default function Home() {
           <div className="contact-box glass">
             <h2 className="section-title">Ready to Start?</h2>
             <p>Let's turn your vision into a visual masterpiece. Drop a message below.</p>
-            
+
             {formStatus === 'success' ? (
-              <motion.div 
+              <motion.div
                 className="success-message"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -251,37 +268,37 @@ export default function Home() {
             ) : (
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    className="glass-input" 
-                    required 
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="glass-input"
+                    required
                     value={formData.name}
                     onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData({ ...formData, [e.target.name || 'message']: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
-                  <input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    className="glass-input" 
-                    required 
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    className="glass-input"
+                    required
                     value={formData.email}
                     onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
-                  <textarea 
-                    placeholder="Tell me about your project..." 
-                    className="glass-input" 
-                    rows={5} 
+                  <textarea
+                    placeholder="Tell me about your project..."
+                    className="glass-input"
+                    rows={5}
                     required
                     value={formData.message}
                     onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                   ></textarea>
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="submit-btn glass"
                   disabled={formStatus === 'sending'}
                 >

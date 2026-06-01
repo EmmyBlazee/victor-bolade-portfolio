@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-info">
-            <h2 className="footer-logo">VB<span className="dot">.</span></h2>
+            <h2 className="footer-logo">VB<Link href="/login" className="dot-link"><span className="dot">.</span></Link></h2>
             <p>Designing digital experiences that leave a lasting impression. Let's build something exceptional together.</p>
           </div>
           

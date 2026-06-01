@@ -7,10 +7,11 @@ interface ProjectCardProps {
   title: string;
   category: string;
   image: string;
+  description?: string;
   index: number;
 }
 
-export default function ProjectCard({ title, category, image, index }: ProjectCardProps) {
+export default function ProjectCard({ title, category, image, description, index }: ProjectCardProps) {
   const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
 
   return (
@@ -33,6 +34,7 @@ export default function ProjectCard({ title, category, image, index }: ProjectCa
           >
             <span className="category">{category}</span>
             <h3 className="project-title playfair">{title}</h3>
+            {description && <p className="project-description">{description}</p>}
             <div className="view-project">
               View Project 
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -97,10 +99,21 @@ export default function ProjectCard({ title, category, image, index }: ProjectCa
 
         .project-title {
           font-size: 1.8rem;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
           font-family: 'Playfair Display', serif;
           font-style: italic;
           font-weight: 500;
+        }
+
+        .project-description {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin-bottom: 15px;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
 
         .view-project {
