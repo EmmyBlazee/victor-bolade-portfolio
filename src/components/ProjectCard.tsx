@@ -15,8 +15,9 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ title, category, image, image_url, description, index }: ProjectCardProps) {
   const imgSrc = image || image_url;
+  const safeTitle = title || '';
   const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
-  const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
+  const slug = encodeURIComponent(safeTitle.toLowerCase().replace(/\s+/g, '-'));
 
   return (
     <Link href={`/project/${slug}`} style={{ display: 'block' }}>
@@ -29,7 +30,7 @@ export default function ProjectCard({ title, category, image, image_url, descrip
         whileHover={{ y: yOffset - 15 }}
       >
         <div className="image-container">
-          <img src={imgSrc} alt={title} className="project-image" />
+          <img src={imgSrc} alt={safeTitle} className="project-image" />
           <div className="overlay">
             <motion.div 
               className="overlay-content"
@@ -38,7 +39,7 @@ export default function ProjectCard({ title, category, image, image_url, descrip
               transition={{ duration: 0.3 }}
             >
               <span className="category">{category}</span>
-              <h3 className="project-title playfair">{title}</h3>
+              <h3 className="project-title playfair">{safeTitle}</h3>
               {description && <p className="project-description">{description}</p>}
               <div className="view-project">
                 View Project 
