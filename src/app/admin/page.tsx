@@ -249,6 +249,11 @@ export default function AdminDashboard() {
                     <div className="project-info">
                       <h4>{p.title}</h4>
                       <span>{p.category}</span>
+                      {p.description && (
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {p.description}
+                        </p>
+                      )}
                     </div>
                     <button onClick={() => handleRemoveProject(index)} className="delete-btn">
                       Remove

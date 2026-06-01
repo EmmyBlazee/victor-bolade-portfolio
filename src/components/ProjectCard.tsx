@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface ProjectCardProps {
   title: string;
@@ -13,38 +14,40 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ title, category, image, description, index }: ProjectCardProps) {
   const yOffset = index % 2 === 0 ? 0 : 40; // Asymmetric offset for masonry feel
+  const slug = encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
 
   return (
-    <motion.div 
-      className="project-card"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: yOffset }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.8 }}
-      whileHover={{ y: yOffset - 15 }}
-    >
-      <div className="image-container">
-        <img src={image} alt={title} className="project-image" />
-        <div className="overlay">
-          <motion.div 
-            className="overlay-content"
-            initial={{ opacity: 0, y: 20 }}
-            whileHover={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <span className="category">{category}</span>
-            <h3 className="project-title playfair">{title}</h3>
-            {description && <p className="project-description">{description}</p>}
-            <div className="view-project">
-              View Project 
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </div>
-          </motion.div>
+    <Link href={`/project/${slug}`} style={{ display: 'block' }}>
+      <motion.div 
+        className="project-card"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: yOffset }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.1, duration: 0.8 }}
+        whileHover={{ y: yOffset - 15 }}
+      >
+        <div className="image-container">
+          <img src={image} alt={title} className="project-image" />
+          <div className="overlay">
+            <motion.div 
+              className="overlay-content"
+              initial={{ opacity: 0, y: 20 }}
+              whileHover={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <span className="category">{category}</span>
+              <h3 className="project-title playfair">{title}</h3>
+              {description && <p className="project-description">{description}</p>}
+              <div className="view-project">
+                View Project 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
 
       <style jsx>{`
         .project-card {
@@ -110,10 +113,17 @@ export default function ProjectCard({ title, category, image, description, index
           color: var(--text-secondary);
           margin-bottom: 15px;
           line-height: 1.4;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          max-height: 150px;
+          overflow-y: auto;
+        }
+
+        /* Hide scrollbar for cleaner look if it scrolls */
+        .project-description::-webkit-scrollbar {
+          width: 4px;
+        }
+        .project-description::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.2);
+          border-radius: 4px;
         }
 
         .view-project {
@@ -124,6 +134,7 @@ export default function ProjectCard({ title, category, image, description, index
           font-weight: 500;
         }
       `}</style>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
