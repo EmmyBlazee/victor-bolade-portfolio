@@ -74,8 +74,8 @@ export default function Home() {
     
     // Fetch live content from Supabase API routes
     Promise.all([
-      fetch('/api/projects').then(r => r.json()),
-      fetch('/api/settings?key=page_content').then(r => r.json())
+      fetch('/api/projects', { cache: 'no-store' }).then(r => r.json()),
+      fetch('/api/settings?key=page_content', { cache: 'no-store' }).then(r => r.json())
     ]).then(([projData, pageData]) => {
       // If we got valid projects back, use them!
       if (Array.isArray(projData) && projData.length > 0) {
